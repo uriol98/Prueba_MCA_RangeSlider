@@ -12,8 +12,8 @@ const Exercise2Page = () => {
     }, []);
     return (<>
         <div className="container mt-3">
-        <h1 className="mb-5"> Prueba</h1>
-        <Range mode={2} limitMin={rangedValues[0]} limitMax={rangedValues[rangedValues.length-1]} rangedValues={rangedValues}/>
+        <h1 className="mb-5"> Exercise 2</h1>
+        <Range mode={'ranged'} limitMin={rangedValues[0]} limitMax={rangedValues[rangedValues.length-1]} rangedValues={rangedValues}/>
         </div>
     </>);
 };

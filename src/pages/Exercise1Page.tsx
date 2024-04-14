@@ -13,7 +13,7 @@ const Exercise1Page = () => {
     return (<>
         <div className="container mt-3">
         <h1 className="mb-5"> Exercise 1</h1>
-        <Range mode={1} rangedValues={[]} limitMin={state.minValue} limitMax={state.maxValue}  />
+        <Range mode={'slider'} rangedValues={[]} limitMin={state.minValue} limitMax={state.maxValue}  />
         </div>
     </>);
 };

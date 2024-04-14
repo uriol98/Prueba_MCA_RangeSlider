@@ -1,46 +1,67 @@
-# Getting Started with Create React App
+# Exercise Slider
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Run project
 
-In the project directory, you can run:
+To start the project, it's necessary to have the "json-server" package installed, which starts a mock server for API calls.
+
+To install the package run the command `npm i -g json-server`. 
+To start the server, execute the command `json-server --watch data.json --port 8000`.
+
 
 ### `npm start`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Especification
+You have to create the following component: <Range />
+You have to use React to create the solution.
 
-### `npm test`
+ ### Exercise 1
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+ The component CAN'T be a HTML5 input range. It has to be a custom one.
+ 
+– The user can drag two bullets through the range line.
 
-### `npm run build`
+– The user can click on both currency number label values (min or max) and set a
+new value.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+– The value will never be less than min or greater than max input values.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+– When some bullet is on hover, this bullet has to be bigger and change cursor's type
+into draggable.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+– Dragging a bullet turns cursor to dragging
 
-### `npm run eject`
+– Min value and max value can't be crossed in range
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+– For this example, provide a mocked http service returning min and max values
+that have to be used in the component. Example: {min: 1, max: 100}. Use
+https://www.mockable.io/ or a custom mocked
+server.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+– Do as many unit tests as you can.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+###Exercise 2
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+– The component CAN'T be a HTML5 input range. It has to be a custom one.
 
-## Learn More
+– Given a range of values: [1.99, 5.99, 10.99, 30.99, 50.99, 70.99] the user will only
+be able to select those values in range
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+– Provide a mocked http service that returns the array of numbers: [1.99, 5.99,
+10.99, 30.99, 50.99, 70.99]. Use h ttps://www.mockable.io/ or a custom mocked
+server.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+– For this type of range, currency values are not input changable. They have to be
+only a label
+
+– The user can drag two bullets through the range line.
+
+– Min value and max value can't be crossed in range
+
+– For this example, provide a mocked service returning min and max values that
+have to be used in the component. Example: {rangeValues: []}
+
+– Do as many unit tests as you can.

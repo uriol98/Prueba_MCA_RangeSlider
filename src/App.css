@@ -39,6 +39,7 @@
 .Slider-track {
   position: absolute;
   width: 100%;
+  z-index: 1;
   height: 20px;
   background-color: rgb(71, 131, 243);
   border-radius: 10px; 
@@ -67,6 +68,7 @@
   position: absolute;
   width: 2px;
   height: 40px; 
+  z-index: 0;
   background-color: gray; 
   transform: translateY(-50%);
 }

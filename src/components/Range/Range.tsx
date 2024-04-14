@@ -53,7 +53,7 @@ const Range = ({mode, limitMin = 0, limitMax = 100, rangedValues = []}: RangePro
     // RANGED
 
     const  positionValues = useMemo(() => {
-        if(!rangedValues) return [];
+        if(!rangedValues || rangedValues.length === 0) return [];
         const relativeStep = rangedValues ? 100/(rangedValues.length -1) : 0;
         let positionValues: any = [];
             rangedValues.forEach((value, idx) => {
@@ -65,9 +65,9 @@ const Range = ({mode, limitMin = 0, limitMax = 100, rangedValues = []}: RangePro
     const [minPosition, maxPosition] = useMemo(() => {
         let min;
         let max;
-        if(positionValues){
-             min = positionValues.find((x: any) => x.position === minState.minReal.toFixed(2));
-             max = positionValues.find((x: any) => x.position === maxState.maxReal.toFixed(2));
+        if(positionValues && positionValues.length !== 0){
+             min = positionValues?.find((x: any) => x.position === minState.minReal.toFixed(2));
+             max = positionValues?.find((x: any) => x.position === maxState.maxReal.toFixed(2));
         }
         return [min?.value || rangedValues[0], max?.value || rangedValues[rangedValues.length-1]];
     }, [minState.minReal, maxState.maxReal, positionValues, rangedValues]);
@@ -173,10 +173,10 @@ const Range = ({mode, limitMin = 0, limitMax = 100, rangedValues = []}: RangePro
                 <div className="flex-grow-1"></div>
                 <span>{limitMax}</span>
             </div>
-            <div className="Slider-track">
-                { positionValues && mode === 'ranged' && positionValues.map( (_: any, idx: number) => {
+                { mode === 'ranged' && positionValues && positionValues.length !== 0 && positionValues.map( (_: any, idx: number) => {
                     return (<div key={idx} className="Slider-step" style={{ left: `${positionValues[idx].position}%`}}></div>)
                 })}
+            <div className="Slider-track">
                 <div className="Slider-pointer" onMouseDown={handleMouseDownMin} style={{  left: `${configuration[mode].slider.min-4}%`}} id="minReal">
                 </div>
                 <div className="Slider-pointer" onMouseDown={handleMouseDownMax} style={{  left: `${configuration[mode].slider.max-4}%`}} id="maxReal">
@@ -188,17 +188,20 @@ const Range = ({mode, limitMin = 0, limitMax = 100, rangedValues = []}: RangePro
 
 
 const InputLabel = ({ mode, minMax, value, onChange }: InputLabelProps)=> {
-    
+    // crear state interno y con un timeout disparar el evento para el debounce 
+    //de esta forma no daria problemas a la hora de actualizar el valor maximo a traves de input
     const label: LabelMinMax = {
         min: 'min Value:',
-        max: 'mx Value:',
+        max: 'max Value:',
     };
     return(
         <div>
-        {mode && {
-            'slider': <><label> min value</label><input type="number"  name="minReal" value={value} onChange={onChange}/></>,
-            'ranged': <label>{`${label[minMax]} ${value}`}</label>,
-        }[mode]}
+        {mode === 'slider' ? (<>
+        <label> min value</label>
+        <input type="number"  name="minReal" value={value} onChange={onChange}/>
+        </>)
+            : <label>{`${label[minMax]} ${value}`}</label>
+        }
     </div>
     )
 };

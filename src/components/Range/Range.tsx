@@ -1,4 +1,3 @@
-import { any, number } from "prop-types";
 import React, {useEffect, useState, useRef, useMemo } from "react";
 
 const initialMinState = {
@@ -33,10 +32,12 @@ interface Configuration {
     slider: {
         slider: { min: number; max: number };
         updateValue: (evt: React.MouseEvent<HTMLDivElement>) => void;
+        handleMouseUp: () => void,
     };
     ranged: {
         slider: { min: number; max: number };
         updateValue: (evt: React.MouseEvent<HTMLDivElement>) => void;
+        handleMouseUp: () => void,
     };
 }
 
@@ -46,9 +47,9 @@ const Range = ({mode, limitMin = 0, limitMax = 100, rangedValues = []}: RangePro
     const sliderRef = useRef(null);
 
     useEffect(() => {
-            setMaxState({ ...maxState, maxReal: mode === 'slider' && limitMax ? limitMax : 100.00 });
-            setMinState({ ...minState, minReal: mode === 'slider' && limitMin ? limitMin : 0 });
-    }, [limitMin, limitMax]);
+            setMaxState((prevState) =>  ({ ...prevState, maxReal: mode === 'slider' && limitMax ? limitMax : 100.00 }));
+            setMinState((prevState) => ({ ...prevState, minReal: mode === 'slider' && limitMin ? limitMin : 0 }));
+    }, [limitMin, limitMax, mode]);
     
     // RANGED
 
@@ -82,14 +83,14 @@ const Range = ({mode, limitMin = 0, limitMax = 100, rangedValues = []}: RangePro
             //Set position relative. In case is greater than max, set to minReal
             setMinState((prevState) => ({ ...prevState, minRelative: minRelative < maxState.maxReal ? minRelative : minState.minReal }));
             //find if relative position matches a range value position
-            const minReal = positionValues.find((x: any) => x.position === minRelative.toFixed(2));
+            const minReal = positionValues.find((x: any) => minRelative > x.position -4 && minRelative < x.position +4 );
             if(minReal) setMinState((prevState) => ({ ...prevState, minReal: parseFloat(minReal.position) }));
         } else if (maxState.isDragging) {
             const maxRelative = Math.max(Math.min(100, percentage), minState.minRelative);
             // Set position relative. In case is lower than min, set to maxReal 
             setMaxState((prevState) => ({ ...prevState, maxRelative: maxRelative > minState.minReal ? maxRelative: maxState.maxReal }));
             //find if relative position matches a range value position
-            const maxReal = positionValues.find((x: any) => x.position === maxRelative.toFixed(2));
+            const maxReal = positionValues.find((x: any) => maxRelative > x.position -4 && maxRelative < x.position +4);
             if(maxReal) setMaxState((prevState) => ({ ...prevState, maxReal: parseFloat(maxReal.position) }));
         }
      };
@@ -145,6 +146,10 @@ const Range = ({mode, limitMin = 0, limitMax = 100, rangedValues = []}: RangePro
         setMaxState({ ...maxState, isDragging: false});
         setMinState({ ...minState, isDragging: false});
      }
+    const handleMouseUpRanged = () => {
+        setMaxState({ ...maxState, maxRelative: maxState.maxReal, isDragging: false});
+        setMinState({ ...minState, minRelative: minState.minReal, isDragging: false});
+     }
 
      const handleMouseDownMin = () => setMinState({ ...minState, isDragging: true});
      const handleMouseDownMax = () => setMaxState({ ...maxState, isDragging: true });
@@ -153,10 +158,13 @@ const Range = ({mode, limitMin = 0, limitMax = 100, rangedValues = []}: RangePro
         slider: {
             slider: { min: minState.minRelative, max: maxState.maxRelative},
             updateValue: updateValueSlider,
+            handleMouseUp: handleMouseUp,
+
         },
         ranged: {
-            slider: { min: minState.minReal, max: maxState.maxReal},
+            slider: { min: minState.minRelative, max: maxState.maxRelative},
             updateValue: updateValueRanged,
+            handleMouseUp: handleMouseUpRanged,
         },
         
     };
@@ -167,7 +175,7 @@ const Range = ({mode, limitMin = 0, limitMax = 100, rangedValues = []}: RangePro
             <InputLabel mode={mode} minMax="max" value={mode === 'slider' ? maxState.maxReal : maxPosition} onChange={setMaxValue} />
         </div>
 
-        <div className="Slider" ref={sliderRef} onMouseMove={configuration[mode].updateValue} onMouseUp={handleMouseUp}>
+        <div className="Slider" ref={sliderRef} onMouseMove={configuration[mode].updateValue} onMouseUp={configuration[mode].handleMouseUp}>
             <div className="mb-3 d-md-flex justify-content-md-end">
                 <span> {limitMin}</span>
                 <div className="flex-grow-1"></div>
